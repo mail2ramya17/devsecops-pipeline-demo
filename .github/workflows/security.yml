@@ -7,7 +7,7 @@ jobs:
   secrets:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with: { fetch-depth: 0 }
       - uses: gitleaks/gitleaks-action@v2
         env: { GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}" }
@@ -16,7 +16,7 @@ jobs:
     runs-on: ubuntu-latest
     container: semgrep/semgrep
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - run: semgrep scan --config p/python --config p/owasp-top-ten --error --sarif-output=semgrep.sarif
       - uses: github/codeql-action/upload-sarif@v3
         if: always()
@@ -25,7 +25,7 @@ jobs:
   sca:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - uses: actions/setup-python@v5
         with: { python-version: "3.12" }
       - run: pip install pip-audit && pip-audit -r requirements.txt
@@ -33,7 +33,7 @@ jobs:
   container:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - run: docker build -t demo-app:${{ github.sha }} .
       - uses: aquasecurity/trivy-action@master
         with:
@@ -46,7 +46,7 @@ jobs:
     needs: container
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - run: docker build -t demo-app . && docker run -d -p 5000:5000 demo-app && sleep 5
       - uses: zaproxy/action-baseline@v0.12.0
         with:
